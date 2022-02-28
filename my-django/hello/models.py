@@ -7,9 +7,6 @@ class Calculator(object):
     def add(self):
         return self.num1 + self.num2
 
-    def calc(self):
-        pass
-
     def sub(self):
         return self.num1 - self.num2
 
@@ -30,16 +27,15 @@ if __name__ == '__main__':
             num2 = int(input('두번째 수'))
             #객체생성
             calc = Calculator(num1, num2)
-            print('*'*30)
             if opcode == '+':
-                res = f'{calc.num1} + {calc.num2} = {calc.add()}'
+                s = calc.add()
             elif opcode == '-':
-                res = f'{calc.num1} - {calc.num2} = {calc.sub()}'
+                s = calc.sub()
             elif opcode == '*':
-                res = f'{calc.num1} * {calc.num2} = {calc.mul()}'
+                s = calc.mul()
             elif opcode == '/':
-                res = f'{calc.num1} / {calc.num2} = {calc.div()}'
-            print(res)
+                s = calc.div()
+            print('*'*30+'\n' + f'{calc.num1}{opcode}{calc.num2}= {s}')
 
 
 

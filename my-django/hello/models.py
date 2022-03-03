@@ -106,33 +106,21 @@ class Quiz07RandomChoice:
 class Quiz08Rps:
     def __init__(self, user):
         self.user = user
-        self.com = myRandom(1, 3)
+        self.com = myRandom(0, 2)
 
     def game(self):
         c = self.com
         u = self.user
         rps = ['가위', '바위', '보']
-        if u == 1:
-            if c == 1:
-                res = '무승부'
-            elif c == 2:
-                res = '패배'
-            elif c == 3:
-                res = '승리'
-        elif u == 2:
-            if c == 1:
-                res = '패배'
-            elif c == 2:
-                res = '무승부'
-            elif c == 3:
-                res = '승리'
-        elif u == 3:
-            if c == 1:
-                res = '패배'
-            elif c == 2:
-                res = '승리'
-            elif c == 3:
-                res = '무승부'
+        b = c - u
+        if b == 1 or b == -2:
+            res = '컴퓨터 승리'
+        elif b == 2 or b == -1:
+            res = '사용자 승리'
+        elif b == 0:
+            res = '무승부'
+        else:
+            res = 'Wrong'
         return res
 
 
@@ -140,33 +128,40 @@ class Quiz09GetPrime(object):
     def __init__(self, start, end):
         self.start = start
         self.end = end
-    def prime(self,n):
-        p = [False,False] + [True]*(n-1)
-        for i in range(self.start, self.end+1):
-            if p[i] == True:
-                for j in range(2*i, n+1, i):
-                    p[j] = False
-        return p
+
+    def prime(self):
+        res = ''
 
 
 class Quiz10LeapYear(object):
-        def __init__(self):
-            pass
+    def __init__(self, year):
+        self.year = year
+    def leapYear(self):
+        if(self.year % 4 == 0) & (self.year % 100 == 0) & (self.year % 400 == 0):
+            res = '윤년입니다.'
+        else:
+            res = '평년입니다.'
+        return res
+
 
 class Quiz11NumberGolf(object):
-        def __init__(self):
+    def __init__(self):
             pass
+
 
 class Quiz12Lotto(object):
-        def __init__(self):
-            pass
+    @staticmethod
+    def lottoNumber():
+        lotto = random.sample(range(1, 46), 6) #지정한 숫자만큼의 요소들을 랜덤으로 뽑아 리스트로 반환
+        lotto.sort() #오름차순으로 정렬
+        return lotto
 
 class Quiz13Bank(object):  # 이름, 입금, 출금만 구현
-        def __init__(self):
+    def __init__(self):
             pass
 
 class Quiz14Gugudan(object):  # 책받침구구단
-        def __init__(self):
+    def __init__(self):
             pass
 
 

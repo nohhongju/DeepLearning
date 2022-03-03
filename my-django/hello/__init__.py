@@ -1,6 +1,6 @@
 from hello.domains import Member
 from hello.models import Quiz01Calculator, Quiz03Grade, Quiz04GradeAuto, Quiz05Dice, Quiz07RandomChoice, Quiz08Rps, \
-    Quiz09GetPrime, Quiz02Bmi
+    Quiz09GetPrime, Quiz02Bmi, Quiz10LeapYear, Quiz12Lotto
 
 if __name__ == '__main__':
     while 1:
@@ -14,9 +14,9 @@ if __name__ == '__main__':
         elif menu == '2':  # BMI
             member = Member()
             q2 = Quiz02Bmi
-            q2.name = input('이름: ')
-            q2.weight = float(input('키: '))
-            q2.height = float(input('몸무게: '))
+            member.name = input('이름: ')
+            member.height = float(input('키: '))
+            member.weight = float(input('몸무게: '))
             res = q2.bmi(member)
             print(f'이름: {member.name}, 키: {member.height}, 몸무게: {member.weight}, BMI상태: {res}입니다.')
 
@@ -40,21 +40,23 @@ if __name__ == '__main__':
             print(q7.chooseMember())
 
         elif menu == '8':
-            q8 = Quiz08Rps(input('user: ')) # 가위 1 바위 2 보 3
-            print(f'결과: {q8.game()}')
+            q8 = Quiz08Rps(int(input('user: '))) # 가위 1 바위 2 보 3
+            print(f'유저{q8.user}, 컴퓨터{q8.com}, 결과: {q8.game()}')
 
         elif menu == '9':
             q9 = Quiz09GetPrime(int(input('처음 숫자:')), int(input('마지막 숫자')))
             print(f'결과{q9.prime()}')
 
         elif menu == '10':
-            q10 = None
+            q10 = Quiz10LeapYear(int(input('년도: ')))
+            print(f'{q10.year}년도는 {q10.leapYear()}')
 
         elif menu == '11':
             q11 = None
 
         elif menu == '12':
-            q12 = None
+            q12 = Quiz12Lotto()
+            print(f'당첨번호{q12.lottoNumber()}')
 
         elif menu == '13':
             q13 = None

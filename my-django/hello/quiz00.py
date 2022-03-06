@@ -75,6 +75,7 @@ class Quiz00:
         return None
 
     def quiz05grade(self):
+        name = myMember()
         kor = myRandom(0, 100)
         eng = myRandom(0, 100)
         math = myRandom(0, 100)
@@ -88,20 +89,28 @@ class Quiz00:
         return self.kor + self.eng + self.math
 
     def avg(self):
-        return self.kor + self.eng + self.math / 3
+        return self.sum() / 3
 
     def grade(self):
         pass
 
     def passChk(self):  # 60점이상이면 합격
-        pass
+        if self.avg() > 60:
+            s = '합격'
+        else:
+            s = '불합격'
+        return s
 
     def quiz06memberChoice(self):
-
-        return members[myRandom(0, 23)]
+        res = myMember()
+        print(f'{res}')
+        return None
 
     def quiz07lotto(self):
-        pass
+        lotto = random.sample(range(1, 46), 6)  # 지정한 숫자만큼의 요소들을 랜덤으로 뽑아 리스트로 반환
+        lotto.sort()  # 오름차순으로 정렬
+        print(f'{lotto}')
+        return None
 
     def quiz08bank(self):  # 이름, 입금, 출금만 구현
         pass

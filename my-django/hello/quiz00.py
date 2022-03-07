@@ -66,12 +66,20 @@ class Quiz00:
         return None
 
     def quiz04leap(self):
-        year = myRandom(0, 3000)
-        if (year % 4 == 0) & (year % 100 == 0) & (year % 400 == 0):
-            res = '윤년입니다.'
+        y = myRandom(2000, 2022)
+        '''
+        s1 = "윤년" if y % 4 == 0 and y % 100 ! = 0 else "평년"
+        s2 = "윤년" if y % 400 == 0 else "평년"
+        Java style => String s = : () ? : ;
+        s = (y % 4 == 0 && y % 100 != 0) ? "윤년" : (y % 400 == 0) ? "윤년" : "평년" ;
+        Python Style  => s = "" if else ""
+        s = "윤년" if y % 4 == 0 and y % 100 != 0 or y % 400 == 0 else "평년"
+        '''
+        if (y % 4 == 0) & (y % 100 == 0) & (y % 400 == 0):
+            res = '윤년'
         else:
-            res = '평년입니다.'
-        print(f'{year}년은 {res}')
+            res = '평년'
+        print(f'{y}년은 {res}입니다.')
         return None
 
     def quiz05grade(self):
@@ -79,27 +87,12 @@ class Quiz00:
         kor = myRandom(0, 100)
         eng = myRandom(0, 100)
         math = myRandom(0, 100)
-        sum = self.sum(kor, eng, math)
-        avg = self.agv(kor, eng, math)
-        grade = self.getGrade()
-        passChk = self.passChk()
-        return [sum, avg, grade, passChk]
+        sum = kor + eng + math
+        avg = sum / 3
+        passChk = "합격" if avg > 60 else "불합격"
+        print(f'이름: {name}, 국어: {kor}, 영어: {eng}, 수학: {math}, 총점: {sum}, 평균: {avg: .2f}, 합격여부: {passChk}')
+        return None
 
-    def sum(self):
-        return self.kor + self.eng + self.math
-
-    def avg(self):
-        return self.sum() / 3
-
-    def grade(self):
-        pass
-
-    def passChk(self):  # 60점이상이면 합격
-        if self.avg() > 60:
-            s = '합격'
-        else:
-            s = '불합격'
-        return s
 
     def quiz06memberChoice(self):
         res = myMember()
@@ -113,7 +106,83 @@ class Quiz00:
         return None
 
     def quiz08bank(self):  # 이름, 입금, 출금만 구현
-        pass
+        Account.main()
 
     def quiz09gugudan(self):  # 책받침구구단
-        pass
+        for k in range(2):
+            for i in range(1, 10):
+                for j in range(2, 6):
+                    print(f'{j} * {i} = {i * j}', end='\t')
+                print("")
+            print("")
+        return None
+
+
+'''
+08번 문제 해결을 위한 클래스는 다음과 같다.
+[요구사항(RFP)]
+은행이름은 비트은행
+입금자 이름(name), 계좌번호(account_number), 금액(money) 속성값으로 계좌를 생성한다.
+계좌번호는 3자리 - 2자리 - 6자리 형태로 랜덤하게 생성된다
+예를 들면 123-12-123456 이다.
+금액은 100~999만원 사이로 랜덤하게 입금된다. (단위는 만 단위로 암묵적으로 판단한다.)
+'''
+class Account(object):
+    def __init__(self, name, account_number, money):
+        self.BANK_NAME = '비트은행'
+        self.name = myMember() if name == None else name
+        # self.account_number = f'{myRandom(1, 999):0>3} - {myRandom(1, 99):0>2} - {myRandom(1, 999999):0>6}'
+        self.account_number = self.creat_account_number() if account_number == None else account_number
+        self.money = myRandom(100, 999) if money == None else money
+    def to_string(self):
+        return f'은행: {self.BANK_NAME}, ' \
+               f'입금자: {self.name}, ' \
+               f'계좌: {self.account_number}, ' \
+               f'금액: {self.money}만원'
+
+    def creat_account_number(self):
+        '''
+        ls = [str(myRandom(0, 9)) for i in range(3)]
+        ls.append("-")
+        ls += [str(myRandom(0, 9)) for i in range(2)]
+        ls.append("-")
+        ls += [str(myRandom(0, 9)) for i in range(6)]
+        return "".join(ls)
+        '''
+        return "".join(['-'if i == 3 or i == 6 else str(myRandom(1, 9)) for i in range(13)])
+
+    def del_account(self, ls, account_number):
+        for i, j in enumerate(ls):
+            if j.account_number == account_number:
+                del ls[i]
+    @staticmethod
+    def main():
+        ls = []
+        while 1:
+            menu = input('0.종료 1.계좌개설 2.계좌목록 3.입금 4.출금 5.계좌해지')
+            if menu == '0':
+                break
+            elif menu == '1':
+                acc = Account(None, None, None)
+                print(f'{acc.to_string()}....개설되었습니다.')
+                ls.append(acc)
+            elif menu == '2':
+                a = '\n'.join([i.to_string() for i in ls])
+                print(a)
+            elif menu == '3':
+                account_number = input('입금할 계좌번호')
+                deposit = input('입금액')
+                for i, j in enumerate(ls):
+                    if j.account_number == account_number:
+                        pass
+
+                #추가 코드 완성
+            elif menu == '4':
+                account_number = input('출금할 계좌번호')
+                deposit = input('출금액')
+                #추가 코드 완성
+            elif menu == '5':
+                account_number = input('탈퇴할 계좌번호')
+            else:
+                print('Wrong Number.. Try Again')
+                continue

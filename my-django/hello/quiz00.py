@@ -109,12 +109,12 @@ class Quiz00:
         Account.main()
 
     def quiz09gugudan(self):  # 책받침구구단
-        for k in range():
-            for i in range(1, 10):
-                for j in range(2, 6):
-                    print(f'{j} * {i} = {i * j}', end='\t')
-                print("")
-            print("")
+        for k in (0, 4):
+            for j in range(1, 10):
+                for i in range(2, 6):
+                    print(f'{i+k}*{j}={(i+k)*j}\t', end='')
+                print()
+            print()
         return None
         '''gugudan = [[i, j, i*j] for i in range(1, 10) for j in range(2, 10)]
         print(f'{gugudan}')'''

@@ -101,8 +101,8 @@ class Quiz20:
         url = 'https://music.bugs.co.kr/chart/track/realtime/total'
         html_doc = urlopen(url)
         soup = BeautifulSoup(html_doc, 'lxml') # html.parser VS lxml
-        ls1 = self.bugs(soup, 'title')
-        ls2 = self.bugs(soup, 'artist')
+        ls1 = self.find_music(soup, 'p', 'class', 'title')
+        ls2 = self.find_music(soup, 'p', 'class', 'artist')
         dict = {}
         # self.dict1(ls1, ls2)
         # self.dict2(ls1, ls2)
@@ -110,6 +110,22 @@ class Quiz20:
             dict[i] = j
         print(dict)
         return dict
+
+    def quiz27melon(self) -> str:
+        headers = {'User-Agent': 'Mozilla/5.0'}
+        url = 'https://www.melon.com/chart/index.htm?dayTime=2022030816'
+        req = urllib.request.Request(url, headers=headers)
+        soup = BeautifulSoup(urlopen(req).read(), 'lxml')
+        ls1 = self.find_music(soup, 'div', 'class', 'ellipsis rank01')
+        ls2 = self.find_music(soup, 'span', 'class', 'checkEllipsis')
+        dict = {}
+        # self.dict1(ls1, ls2)
+        # self.dict2(ls1, ls2)
+        for i, j in zip(ls1, ls2):
+            dict[i] = j
+        print(dict)
+        return dict
+
     @staticmethod
     def dict1(ls1, ls2) -> None:
         dict = {}
@@ -136,18 +152,18 @@ class Quiz20:
         # print(''.join(i for i in titles))
 
         for i, j in enumerate(['artist', 'title']):
-            print(''.join(i for i in [i for i in self.bugs(soup, j)]))
+            print(''.join(i for i in [i for i in self.find_music(soup, j)]))
         # a = [i for i in self.bugs(soup, 'artist')]
         # a = [i for i in self.bugs(soup, 'title')]
 
     def find_rank(self, soup):
         for i, j in enumerate(['artist', 'title']):
-            for i, j in enumerate(self.bugs(soup, j)):
+            for i, j in enumerate(self.find_music(soup, j)):
                 print(f'{i}위: {j}')
 
     @staticmethod
-    def bugs(soup, cls_nm) -> []:
-        ls = soup.find_all('p', {'class': cls_nm})
+    def find_music(soup, a, b, cls_nm) -> []:
+        ls = soup.find_all(a, {b: cls_nm})
         return [i.get_text() for i in ls]
         # print(''.join(i for i in ls))
 
@@ -155,15 +171,6 @@ class Quiz20:
 
     def quiz26map(self) -> str: return None
 
-    def quiz27melon(self) -> str:
-        headers = {'User-Agent': 'Mozilla/5.0'}
-        url = 'https://www.melon.com/chart/index.htm?dayTime=2022030816'
-        req = urllib.request.Request(url, headers=headers)
-        soup = BeautifulSoup(urlopen(req).read(), 'lxml')
-        music = soup.find_all('div', {'class': 'ellipsis rank01'})
-        music = [i.get_text() for i in music]
-        print(''.join(i for i in music))
-        return None
 
     def quiz28dataframe(self) -> None:
         dict = self.quiz24zip()

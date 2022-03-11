@@ -4,6 +4,10 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import pandas as pd
 
+from hello import Quiz00
+from hello.domains import myRandom, members, myMember
+
+
 class Quiz20:
 
     def quiz20list(self) -> str:
@@ -103,13 +107,15 @@ class Quiz20:
         soup = BeautifulSoup(html_doc, 'lxml') # html.parser VS lxml
         ls1 = self.find_music(soup, 'p', 'class', 'title')
         ls2 = self.find_music(soup, 'p', 'class', 'artist')
-        dict = {}
+        d = {i:j for i, j in zip(ls1, ls2)}
+        l = [i + j for i, j in zip(ls1, ls2)]
+        l2 = list(zip(ls1, ls2))
+        d1 = dict(zip(ls1, ls2))
+        print(d)
         # self.dict1(ls1, ls2)
         # self.dict2(ls1, ls2)
-        for i, j in zip(ls1, ls2):
-            dict[i] = j
-        print(dict)
-        return dict
+        # self.dict3(ls1, ls2)
+        return d
 
     def quiz27melon(self) -> str:
         headers = {'User-Agent': 'Mozilla/5.0'}
@@ -121,9 +127,6 @@ class Quiz20:
         dict = {}
         # self.dict1(ls1, ls2)
         # self.dict2(ls1, ls2)
-        for i, j in zip(ls1, ls2):
-            dict[i] = j
-        print(dict)
         return dict
 
     @staticmethod
@@ -141,7 +144,14 @@ class Quiz20:
             dict[j] = ls2[i]
         print(dict)
 
-    def print_music_list(self, soup) -> None:
+    @staticmethod
+    def dict3(ls1, ls2) -> None:
+        dict = {}
+        for i, j in zip(ls1, ls2):
+            dict[i] = j
+        print(dict)
+
+    '''def print_music_list(self, soup) -> None:
         artists = soup.find_all('p', {'class': 'artist'})
         artists = [i.get_text() for i in artists]
         # print(''.join(i for i in artists))
@@ -154,7 +164,7 @@ class Quiz20:
         for i, j in enumerate(['artist', 'title']):
             print(''.join(i for i in [i for i in self.find_music(soup, j)]))
         # a = [i for i in self.bugs(soup, 'artist')]
-        # a = [i for i in self.bugs(soup, 'title')]
+        # a = [i for i in self.bugs(soup, 'title')]'''
 
     def find_rank(self, soup):
         for i, j in enumerate(['artist', 'title']):
@@ -167,10 +177,18 @@ class Quiz20:
         return [i.get_text() for i in ls]
         # print(''.join(i for i in ls))
 
-    def quiz25dictcom(self) -> str: return None
+    def quiz25dictcom(self) -> None:
+        # students = random.sample(members(), 5)
+        b = set([myMember() for i in range(5)])
+        print(f'set len : {len(b)}')
+        while len(b) != 5:
+            b.add(myMember())
+        students = list(b)
+        scores = [myRandom(0, 100) for i in range(5)]
+        a = {i: j for i, j in zip(students, scores)}
+        print(f'dict: {a}')
 
     def quiz26map(self) -> str: return None
-
 
     def quiz28dataframe(self) -> None:
         dict = self.quiz24zip()
@@ -178,4 +196,30 @@ class Quiz20:
         print(df)
         df.to_csv('./save/bugs.csv', sep=',', na_rep='NaN')
 
-    def quiz29(self) -> str: return None
+    '''
+    다음 결과 출력
+        a   b   c
+    1   1   3   5
+    2   2   4   6
+    '''
+    def quiz29_pandas_01(self) -> object:
+        d1 = {'a': [1, 2],
+              'b': [3, 4],
+              'c': [5, 6]}
+        d1_1 = ['1', '2']
+        frame = pd.DataFrame(d1, d1_1)
+        d2 = {"1": [1, 3, 5], "2": [2, 4, 6]}
+        df2 = pd.DataFrame.from_dict(d2, orient='index', columns=['a', 'b', 'c'])
+        c = [chr(i) for i in range(97, 100)] #['a', 'b', 'c']
+        d3 = {"1": [1, 3, 5]}
+        d4 = {"2": [2, 4, 6]}
+        df3 = pd.DataFrame.from_dict(d2, orient='index', columns=c)
+        ls1 = []
+        ls2 = []
+        d3_1 = [ls1.append(i) if i % 2 == 1 else ls2.append(i) for i in range(1, 7)]
+        a = [ls1, ls2]
+        b = {i: j for i, j in zip(d1_1, a)}
+        df4 = pd.DataFrame.from_dict(b, orient='index', columns=c)
+        print(df4)
+
+        return None

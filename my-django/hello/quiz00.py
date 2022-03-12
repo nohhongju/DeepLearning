@@ -133,20 +133,24 @@ class Quiz00:
 예를 들면 123-12-123456 이다.
 금액은 100~999만원 사이로 랜덤하게 입금된다. (단위는 만 단위로 암묵적으로 판단한다.)
 '''
+
+
 class Account(object):
     def __init__(self, name, account_number, money):
         self.BANK_NAME = '비트은행'
-        self.name = myMember() if name == None else name
+        self.name = myMember() if name is None else name
         # self.account_number = f'{myRandom(1, 999):0>3} - {myRandom(1, 99):0>2} - {myRandom(1, 999999):0>6}'
-        self.account_number = self.creat_account_number() if account_number == None else account_number
-        self.money = myRandom(100, 999) if money == None else money
+        self.account_number = self.creat_account_number() if account_number is None else account_number
+        self.money = myRandom(100, 999) if money is None else money
+
     def to_string(self):
         return f'은행: {self.BANK_NAME}, ' \
                f'입금자: {self.name}, ' \
                f'계좌: {self.account_number}, ' \
                f'금액: {self.money}만원'
 
-    def creat_account_number(self):
+    @staticmethod
+    def creat_account_number():
         '''
         ls = [str(myRandom(0, 9)) for i in range(3)]
         ls.append("-")
@@ -159,6 +163,7 @@ class Account(object):
 
     def deposit(self, account_number, deposit):
         print(f'계좌번호:{self.account_number} , 입금액: {self.deposit}')
+
     @staticmethod
     def find_account(ls, account_number):
         #return ''.join([j.to_string() if j.account_number == account_number else ' 찾는 계좌가 아님 ' for i, j in enumerate(ls)])
@@ -171,6 +176,7 @@ class Account(object):
         for i, j in enumerate(ls):
             if j.account_number == account_number:
                 del ls[i]
+
     @staticmethod
     def main():
         ls = []

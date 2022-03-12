@@ -78,7 +78,18 @@ class Quiz30:
 
         return None
 
-    def quiz33(self) -> str: return None
+    def quiz33(self) -> str:
+        column_name = ['나이', '성별', '잔고', '결혼여부']
+
+        df_list = [[20, '남자', 2000, '미혼'],
+                   [50, '여자', 15000, '결혼'],
+                   [48, '남자', 20000, '결혼'],
+                   [32, '여자', 800, '미혼'],
+                   [28, '남자', 1200, '결혼'],
+                   [38, '여자', 3600, '결혼']]
+        df1 = pd.DataFrame(df_list, index=range(0, 6), columns=column_name)
+        ic(df1)
+        return None
 
     def quiz34(self) -> str: return None
 

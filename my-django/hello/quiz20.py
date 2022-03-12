@@ -107,7 +107,7 @@ class Quiz20:
         soup = BeautifulSoup(html_doc, 'lxml') # html.parser VS lxml
         ls1 = self.find_music(soup, 'p', 'class', 'title')
         ls2 = self.find_music(soup, 'p', 'class', 'artist')
-        d = {i:j for i, j in zip(ls1, ls2)}
+        d = {i: j for i, j in zip(ls1, ls2)}
         l = [i + j for i, j in zip(ls1, ls2)]
         l2 = list(zip(ls1, ls2))
         d1 = dict(zip(ls1, ls2))

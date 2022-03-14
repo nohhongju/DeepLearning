@@ -1,4 +1,4 @@
-from domains import Dataset
+from titanic.domains import Dataset
 import numpy as np
 import pandas as pd
 import sklearn

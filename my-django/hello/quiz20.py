@@ -203,23 +203,29 @@ class Quiz20:
     2   2   4   6
     '''
     def quiz29_pandas_01(self) -> object:
-        d1 = {'a': [1, 2],
-              'b': [3, 4],
-              'c': [5, 6]}
+        d1 = {'a': [1, 2], 'b': [3, 4], 'c': [5, 6]}
         d1_1 = ['1', '2']
-        frame = pd.DataFrame(d1, d1_1)
+        df1 = pd.DataFrame(d1, d1_1)
+        '''
+           a  b  c
+        1  1  3  5
+        2  2  4  6
+        '''
+
         d2 = {"1": [1, 3, 5], "2": [2, 4, 6]}
         df2 = pd.DataFrame.from_dict(d2, orient='index', columns=['a', 'b', 'c'])
         c = [chr(i) for i in range(97, 100)] #['a', 'b', 'c']
         d3 = {"1": [1, 3, 5]}
         d4 = {"2": [2, 4, 6]}
         df3 = pd.DataFrame.from_dict(d2, orient='index', columns=c)
-        ls1 = []
-        ls2 = []
-        d3_1 = [ls1.append(i) if i % 2 == 1 else ls2.append(i) for i in range(1, 7)]
-        a = [ls1, ls2]
-        b = {i: j for i, j in zip(d1_1, a)}
+
+        odds = []
+        evens = []
+        d3_1 = [odds.append(i) if i % 2 == 1 else evens.append(i) for i in range(1, 7)]
+        a = [odds, evens]
+        a2 = ['1', '2']
+        b = {i: j for i, j in zip(a2, a)}
         df4 = pd.DataFrame.from_dict(b, orient='index', columns=c)
-        print(df4)
+        print(df2)
 
         return None

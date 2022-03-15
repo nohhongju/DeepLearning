@@ -1,16 +1,21 @@
-from titanic.domains import Dataset
-import numpy as np
-import pandas as pd
-import sklearn
+from icecream import ic
+from context.models import Model
+from context.domains import Dataset
 
-class Model:
 
-    dataset = Dataset()
+class TitanicModel(object):
+    def __init__(self, train_fname, test_fname):
+        self.model = Model()
+        self.dataset = Dataset()
+        self.train = self.model.new_model(train_fname)
+        self.test = self.model.new_model(test_fname)
+        # id 추출
+        ic(f'트레인 컬럼{self.train.columns}')
+        ic(f'트레인 헤드{self.test.head()}')
+        ic(self.train)
 
-    def new_model(self, payload) -> object:
-        this = self.dataset
-        this.context = './data/'
-        this.fname = payload
-        # index_col=0 해야 기존 index 값이 유지된다.
-        # 0은 컬럼명 중 첫번째를 의미한다(배열구조)
-        return pd.read_csv(this.context+this.fname, index_col=0)
+    def preprocess(self):
+        self.create_label()
+
+    def create_label(self):
+        pass

@@ -47,22 +47,22 @@ class Quiz30:
         return None
 
     '''
-                데이터프레임 문제 Q04.
-                국어, 영어, 수학, 사회 4과목을 시험치른 10명의 학생들의 성적표 작성.
-                 단 점수 0 ~ 100이고 학생은 랜덤 알파벳 5자리 ID 로 표기
+        데이터프레임 문제 Q04.
+        국어, 영어, 수학, 사회 4과목을 시험치른 10명의 학생들의 성적표 작성.
+         단 점수 0 ~ 100이고 학생은 랜덤 알파벳 5자리 ID 로 표기
 
-                  ic| df4:        국어  영어  수학  사회
-                            lDZid  57  90  55  24
-                            Rnvtg  12  66  43  11
-                            ljfJt  80  33  89  10
-                            ZJaje  31  28  37  34
-                            OnhcI  15  28  89  19
-                            claDN  69  41  66  74
-                            LYawb  65  16  13  20
-                            QDBCw  44  32   8  29
-                            PZOTP  94  78  79  96
-                            GOJKU  62  17  75  49
-        '''
+          ic| df4:        국어  영어  수학  사회
+                    lDZid  57  90  55  24
+                    Rnvtg  12  66  43  11
+                    ljfJt  80  33  89  10
+                    ZJaje  31  28  37  34
+                    OnhcI  15  28  89  19
+                    claDN  69  41  66  74
+                    LYawb  65  16  13  20
+                    QDBCw  44  32   8  29
+                    PZOTP  94  78  79  96
+                    GOJKU  62  17  75  49
+    '''
     @staticmethod
     def id(chr_size) -> str: return ''.join([random.choice(string.ascii_letters)for i in range(chr_size)])
 
@@ -95,18 +95,24 @@ class Quiz30:
         # ic(df.iloc[0])
 
 
-        subj = ['자바', '파이썬', '자바스크립트', 'SQL']
-        stud = members()
-        d = np.random.randint(0, 100, size=(24, 4))
-        df = pd.DataFrame(d, index=stud, columns=subj)
-        ic(df)
+        # subj = ['자바', '파이썬', '자바스크립트', 'SQL']
+        # stud = members()
+        # d = np.random.randint(0, 100, size=(24, 4))
+        # df = pd.DataFrame(d, index=stud, columns=subj)
+        # ic(df)
 
-        df.to_csv('./save/grade.csv', sep=',', na_rep='NaN')
+        # df.to_csv('./save/grade.csv', sep=',', na_rep='NaN')
 
         # https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.loc.html
         model = Model()
         grade_df = model.new_model('grades.csv')
-        ic(grade_df)
+        # ic(grade_df)
+        print('Q1.파이썬의 점수만 출력하시오')
+        python_scores = grade_df.iloc['1']
+        ic(python_scores)
+        print('Q2.조현국의 점수만 출력하시오')
+        cho_scores = grade_df.loc[7]
+        ic(cho_scores)
 
         return None
 

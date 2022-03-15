@@ -1,5 +1,6 @@
 from titanic.domains import Dataset
 from titanic.models import Model
+import icecream as ic
 
 
 class View:

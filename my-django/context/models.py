@@ -19,10 +19,10 @@ class Model:
     def save_model(self, fname, dframe):
         this = self.ds
         '''
-               풀옵션은 다음과 같다
-               df.to_csv(f'{self.ds.sname}{fname}',sep=',',na_rep='NaN',
-                                float_format='%.2f',  # 2 decimal places
-                                columns=['ID', 'X2'],  # columns to write
-                                index=False)  # do not write index
+           풀옵션은 다음과 같다
+           df.to_csv(f'{self.ds.sname}{fname}',sep=',',na_rep='NaN',
+                            float_format='%.2f',  # 2 decimal places
+                            columns=['ID', 'X2'],  # columns to write
+                            index=False)  # do not write index
         '''
         dframe.to_csv(f'{this.sname}{fname}', sep=',', na_rep='NaN')

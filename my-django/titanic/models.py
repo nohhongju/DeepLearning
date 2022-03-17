@@ -6,20 +6,19 @@ from context.domains import Dataset
 class TitanicModel(object):
     model = Model()
     dataset = Dataset()
-    def __init__(self, train_fname, test_fname):
-        self.train = self.model.new_dframe(train_fname)
-        self.test = self.model.new_dframe(test_fname)
-        self.id = self.test['PassengerId']
-        # id 추출
-        # ic(f'트레인 컬럼{self.train.columns}')
-        # ic(f'트레인 헤드{self.train.head()}')
 
-    def preprocess(self):
-        this = self.create_this(self.dataset)
-        self.print_this(this)
-
+    def preprocess(self, train_fname, test_fname):
+        this = self.dataset
+        that = self.model
+        # 데이터셋은 Train, Test, Validation 3종류로 나뉜다.
+        this.train = that.new_dframe(fname=train_fname)
+        this.test = that.new_dframe(test_fname)
+        this.id = this.test['PassengerId']
+        this.label = this.train['Survived']
+        this.train = this.train.drop('Survived', axis=1)
+        # Entity 에서 Object 로 전환
+        this = self.drop_feature(this, 'SibSp', 'Parch', 'Cabin', 'Ticket')
         '''
-        this = self.drop_feature(this)
         this = self.create_label(this)
         this = self.create_train(this)
         this = self.name_nominal(this)
@@ -27,7 +26,9 @@ class TitanicModel(object):
         this = self.sex_nominal(this)
         this = self.age_ratio(this)
         this = self.fare_ratio(this)
-        this = self.embarked_nominal(this)'''
+        this = self.embarked_nominal(this)
+        '''
+        self.print_this(this)
         return this
 
     @staticmethod
@@ -45,29 +46,18 @@ class TitanicModel(object):
         ic(f'10. ID 의 상위 10개 : {this.id[:10]}\n')
         print('*' * 100)
 
-    def create_this(self, dataset) -> object:
-        this = dataset
-        this.train = self.train
-        this.test = self.test
-        this.id = self.id
-        return this
-
     @staticmethod
-    def create_label(this) -> object:
-        return this
+    def drop_feature(this, *feature) -> object:
+        for i in feature:
+            this.train.drop(i, axis=1)
+            this.test = this.test.drop(i, axis=1)
+        # for i in [this.train, this.test]:
+        #     for j in feature:
+        #         i.drop(j, axis=1, inplace=True)
+        [i.drop(j, axis=1, inplace=True)for j in feature for i in [this.train, this.test]]
 
-    @staticmethod
-    def create_train(this) -> object:
-        return this
 
-    def drop_feature(self, this) -> object:
-        a = [i for i in []]
-        '''
-        self.sibSp_garbage(df)
-        self.parch_garbage(df)
-        self.ticket_garbage(df)
-        self.cabin_ordinal(df)
-        '''
+
         return this
 
     '''

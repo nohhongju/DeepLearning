@@ -31,9 +31,10 @@ class TitanicModel(object):
         this = self.embarked_nominal(this)
         this = self.age_ratio(this)
         this = self.drop_feature(this, 'Age')
+        this = self.fare_ratio(this)
         '''
         this = self.pclass_ordinal(this)
-        this = self.fare_ratio(this)
+        
         
         
         '''
@@ -89,11 +90,12 @@ class TitanicModel(object):
         Cate -> nominal (이름) vs. ordinal (순서)
         Quan -> interval (상대) vs. ratio (절대)
     '''
+    '''
     @staticmethod
     def kwargs_sample(this, **kwargs) -> None:
         ic(type(kwargs))  # ic| type(feature): <class 'tuple'>
         {print("".join(f'key{i}, val:{j}')) for i, j in kwargs.items()} # key:name, val:이순신
-
+    '''
     @staticmethod
     def pclass_ordinal(this) -> object:
         return this
@@ -176,8 +178,15 @@ class TitanicModel(object):
     def fare_ratio(this) -> object:
         this.test['Fare'] = this.test['Fare'].fillna(1)
         this.train['FareBand'] = pd.qcut(this.train['Fare'], 4)
+        # print(this.train['FareBand'])
+        bins = [-0.001, 7.896, 14.454, 31.475, np.inf]
+        labels = ['0', '1', '2', '3']
+        fare_mapping = {'0': 0, '1': 1, '2': 2, '3': 3}
+        for i in [this.train, this.test]:
+            i['Fare'] = pd.cut(i['Fare'], bins, labels=labels)
+            i['FareBand'] = i['Fare'].map(fare_mapping)
         # print(f'qcut 으로 bins 값 설정 {this.train["FareBand"].head()}')
-        bins = [-1, 8, 15, 31, np.inf]
+
         return this
 
 

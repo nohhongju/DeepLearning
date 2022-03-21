@@ -3,6 +3,11 @@ import pandas as pd
 from icecream import ic
 from context.models import Model
 from context.domains import Dataset
+from sklearn.model_selection import KFold
+from sklearn.model_selection import cross_val_score
+from sklearn.ensemble import RandomForestClassifier
+
+
 
 
 class TitanicModel(object):
@@ -32,29 +37,28 @@ class TitanicModel(object):
         this = self.age_ratio(this)
         this = self.drop_feature(this, 'Age')
         this = self.fare_ratio(this)
-        '''
+        this = self.drop_feature(this, 'Fare')
         this = self.pclass_ordinal(this)
-        
-        
-        
-        '''
-        self.df_info(this)
+        # self.df_info(this)
+        k_fold = self.create_k_fold()
+        accuracy = self.get_accuracy(this, k_fold)
+        ic(accuracy)
         return this
 
-    '''@staticmethod
-    def print_this(this):
-        print('*' * 100)
-        ic(f'1. Train 의 타입 : {type(this.train)}\n')
-        ic(f'2. Train 의 컬럼 : {this.train.columns}\n')
-        ic(f'3. Train 의 상위 1개 : {this.train.head(1)}\n')
-        ic(f'4. Train 의 null의 개수 : {this.train.isnull().sum()}\n')
-        ic(f'5. Test 의 타입 : {type(this.test)}\n')
-        ic(f'6. Test 의 컬럼 : {this.test.columns}\n')
-        ic(f'7. Test 의 상위 1개 : {this.test.head(1)}\n')
-        ic(f'8. Test 의 null의 개수 : {this.test.isnull().sum()}\n')
-        ic(f'9. ID 의 타입 : {type(this.id)}\n')
-        ic(f'10. ID 의 상위 10개 : {this.id[:10]}\n')
-        print('*' * 100)'''
+    def learning(self, train_fname, test_fname):
+        this = self.preprocess(train_fname, test_fname)
+        self.df_info(this)
+
+        k_fold = self.create_k_fold()
+        ic(f'사이킷런 알고리즘 정확도: {self.get_accuracy(this, k_fold)}')
+        self.submit(this)
+
+    @staticmethod
+    def submit(this):
+        clf = RandomForestClassifier()
+        clf.fit(this.train, this.label)
+        prediction = clf.predict(this.test)
+        pd.DataFrame({'PassengerId': this.id, 'Survived': prediction}).to_csv('./save/submission.csv', index=False)
 
     @staticmethod
     def df_info(this):
@@ -96,6 +100,7 @@ class TitanicModel(object):
         ic(type(kwargs))  # ic| type(feature): <class 'tuple'>
         {print("".join(f'key{i}, val:{j}')) for i, j in kwargs.items()} # key:name, val:이순신
     '''
+
     @staticmethod
     def pclass_ordinal(this) -> object:
         return this
@@ -158,11 +163,11 @@ class TitanicModel(object):
                        'Young Adult': 5, 'Adult': 6, 'Senior': 7}
         train['Age'] = train['Age'].fillna(-0.5)
         test['Age'] = test['Age'].fillna(-0.5)
-        bins = [-1, 0, 5, 12, 18, 24, 35, 60, np.inf]
+        bins = [-1, 0, 6, 12, 18, 26, 39, 60, np.inf]
         labels = ['Unknown', 'Baby', 'Child', 'Teenager', 'Student', 'Young Adult', 'Adult', 'Senior']
         for these in train, test:
             # pd.cut() 을 사용하시오. 다른 곳은 고치지 말고 다음 두 줄만 코딩하시오
-            these['AgeGroup'] = pd.cut(these['Age'], bins, right=False, labels=labels)  # pd.cut() 을 사용
+            these['AgeGroup'] = pd.cut(these['Age'], bins=bins, right=False, labels=labels)  # pd.cut() 을 사용/ right=False 는 기본값
             these['AgeGroup'] = these['AgeGroup'].map(age_mapping)  # map() 을 사용
         return this
 
@@ -178,16 +183,26 @@ class TitanicModel(object):
     def fare_ratio(this) -> object:
         this.test['Fare'] = this.test['Fare'].fillna(1)
         this.train['FareBand'] = pd.qcut(this.train['Fare'], 4)
+        # print(f'qcut 으로 bins 값 설정 {this.train["FareBand"].head()}')
         # print(this.train['FareBand'])
         bins = [-0.001, 7.896, 14.454, 31.475, np.inf]
-        labels = ['0', '1', '2', '3']
-        fare_mapping = {'0': 0, '1': 1, '2': 2, '3': 3}
+        fare_mapping = {1, 2, 3, 4}
+
         for i in [this.train, this.test]:
-            i['Fare'] = pd.cut(i['Fare'], bins, labels=labels)
-            i['FareBand'] = i['Fare'].map(fare_mapping)
-        # print(f'qcut 으로 bins 값 설정 {this.train["FareBand"].head()}')
+            i['FareBand'] = i['Fare'].fillna(1)
+            i['FareBand'] = pd.qcut(i['FareBand'], 4, fare_mapping)
 
         return this
+
+    @staticmethod
+    def create_k_fold() -> object:
+        return KFold(n_splits=10, shuffle=True, random_state=0)
+
+    @staticmethod
+    def get_accuracy(this, k_fold):
+        score = cross_val_score(RandomForestClassifier(), this.train, this.label, cv=k_fold, n_jobs=1, scoring='accuracy')
+        return round(np.mean(score)*100, 2)
+
 
 
 
